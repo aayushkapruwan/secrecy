@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signInSchema } from "@/schemas/signInSchema";
+import Logo from "@/components/Logo";
 export default function signup() {
   const router = useRouter();
 
@@ -61,13 +62,16 @@ export default function signup() {
     },
   });
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-800">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-100">
+      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-xl shadow-lg border border-purple-200/50">
         <div className="text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
-            Join Secrecy
+          <div className="mb-8">
+            <Logo size="lg" />
+          </div>
+          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6 text-purple-900">
+            Welcome Back
           </h1>
-          <p className="mb-4">Sign in to start your anonymous adventure</p>
+          <p className="mb-4 text-purple-600">Sign in to continue your anonymous adventure</p>
         </div>
         <Form {...form}>
           <div>

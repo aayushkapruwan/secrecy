@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Logo from "@/components/Logo";
 export default function signup() {
   const router = useRouter();
   const [username, setUsername] = useState("");
@@ -96,13 +97,16 @@ export default function signup() {
     },
   });
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-800">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-100">
+      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-xl shadow-lg border border-purple-200/50">
         <div className="text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
+          <div className="mb-8">
+            <Logo size="lg" />
+          </div>
+          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6 text-purple-900">
             Join Secrecy
           </h1>
-          <p className="mb-4">Sign up to start your anonymous adventure</p>
+          <p className="mb-4 text-purple-600">Sign up to start your anonymous adventure</p>
         </div>
         <Form {...form}>
           <div>
@@ -192,11 +196,11 @@ export default function signup() {
           </div>
         </Form>
                     <div className="text-center mt-4">
-              <p>
+              <p className="text-purple-600">
                 Already a member?{" "}
                 <Link
                   href="/sign-in"
-                  className="text-blue-600 hover:text-blue-800"
+                  className="text-purple-900 hover:text-purple-700 font-medium"
                 >
                   Sign in
                 </Link>

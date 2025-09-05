@@ -8,8 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { acceptingMessageInSchema } from '@/schemas/acceptMessageSchema'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
-import { Loader2 } from 'lucide-react'
-import { RefreshCcw } from 'lucide-react'
+import { Loader2, RefreshCcw, Mail } from 'lucide-react'
 import { toast } from 'sonner'
 import { useSession } from 'next-auth/react'
 import axios, { AxiosError } from 'axios'
@@ -116,63 +115,111 @@ function page() {
   }, [fetchMessages, fetchAcceptMessages, session, setValue, toast])
 
   return (
-    <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
-      <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
-      {/* copy profile url section */}
-      <div className="mb-4">
-        <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>{' '}
-        <div className="flex items-center">
-          <input
-            type="text"
-            value={profileUrl}
-            disabled
-            className="input input-bordered w-full p-2 mr-2"
-          />
-          <Button onClick={copyToClipboard}>Copy</Button>
+    <div className="min-h-screen bg-purple-50">
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-purple-900 mb-2">Dashboard</h1>
+          <p className="text-purple-600">Manage your anonymous messaging profile</p>
         </div>
-      </div>
-      {/*  switch section */}
-      <div className="mb-4">
-        <Switch
-          {...register('isAcceptingMessage')}
-          checked={acceptMessages} //wiring the state to switch
-          onCheckedChange={handleSwitchChange}
-          disabled={isSwitchLoading}
-        />
-        <span className="ml-2">
-          Accept Messages: {acceptMessages ? 'On' : 'Off'}
-        </span>
-      </div>
-      <Separator />
-      {/* message refresh */}
-      <Button
-        className="mt-4"
-        variant="outline"
-        disabled={isLoading}
-        onClick={(e) => {
-          e.preventDefault();
-          fetchMessages(true);
-        }}
-      >
-        {isLoading ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
-        ) : (
-          <RefreshCcw className="h-4 w-4" />
-        )}
-      </Button>
-      {/* messages section */}
-      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-        {messages.length > 0 ? (
-          messages.map((message) => (
-            <MessageCard
-              key={message._id as string}
-              message={message}
-              onMessageDelete={handleDeleteMessage}
-            />
-          ))
-        ) : (
-          <p>No messages to display.</p>
-        )}
+
+        <div className="grid gap-8 lg:grid-cols-3">
+          {/* Profile Settings */}
+          <div className="lg:col-span-1 space-y-6">
+            {/* Profile URL Card */}
+            <div className="bg-white rounded-xl p-6 border border-purple-200/50 shadow-sm">
+              <h2 className="text-lg font-semibold text-purple-900 mb-4">Your Profile Link</h2>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-lg border border-purple-200">
+                  <input
+                    type="text"
+                    value={profileUrl}
+                    disabled
+                    className="flex-1 bg-transparent text-sm text-purple-700 outline-none"
+                  />
+                  <Button
+                    size="sm"
+                    onClick={copyToClipboard}
+                    className="bg-purple-900 hover:bg-purple-800"
+                  >
+                    Copy
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Message Settings Card */}
+            <div className="bg-white rounded-xl p-6 border border-purple-200/50 shadow-sm">
+              <h2 className="text-lg font-semibold text-purple-900 mb-4">Message Settings</h2>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium text-purple-900">Accept Messages</p>
+                    <p className="text-sm text-purple-600">Allow others to send you messages</p>
+                  </div>
+                  <Switch
+                    {...register('isAcceptingMessage')}
+                    checked={acceptMessages}
+                    onCheckedChange={handleSwitchChange}
+                    disabled={isSwitchLoading}
+                    className="data-[state=checked]:bg-purple-900"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Messages Section */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-xl border border-purple-200/50 shadow-sm">
+              <div className="p-6 border-b border-purple-200/50">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-lg font-semibold text-purple-900">Messages</h2>
+                    <p className="text-sm text-purple-600">Anonymous messages you've received</p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={isLoading}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      fetchMessages(true);
+                    }}
+                    className="border-purple-200 hover:bg-purple-50"
+                  >
+                    {isLoading ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <RefreshCcw className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
+              </div>
+
+              <div className="p-6">
+                {messages.length > 0 ? (
+                  <div className="space-y-4">
+                    {messages.map((message) => (
+                      <MessageCard
+                        key={message._id as string}
+                        message={message}
+                        onMessageDelete={handleDeleteMessage}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Mail className="w-8 h-8 text-purple-400" />
+                    </div>
+                    <h3 className="text-lg font-medium text-purple-900 mb-2">No messages yet</h3>
+                    <p className="text-purple-600">Share your profile link to start receiving anonymous messages</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

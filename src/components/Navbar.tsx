@@ -12,61 +12,70 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import Logo from "./Logo";
 function Navbar() {
   const router = useRouter()
   const { data: session } = useSession();
   const user: User = session?.user;
   return (
-    <div className="w-screen bg-gray-600">
-      <div className="max-w-5xl mx-auto h-15 flex justify-between items-center">
-        <div>
-          <button className=" font-extrabold font-serif text-3xl">
-            secrecy
-          </button>
-        </div>
-        <div>
+    <nav className="w-full bg-purple-300/90 backdrop-blur-md border-b border-purple-200/50 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
+        <Logo size="md" />
+        <div className="flex items-center gap-6">
           {session ? (
             <>
-              <div className=" flex justify-between items-center gap-4">
-                <Link href="/dashboard">
-                  <Button>Dashboard</Button>
-                </Link>
-                <Button
-                  onClick={() => {
-                    async function signout() {
-                      await signOut({
-                        redirect: true,
-                        callbackUrl: "/sign-in", // Redirect to sign-in page after logout
-                      });
-                      toast("signed out successfully");
-                      router.push('/sign-in')
-                    }
-                    signout()
-                  }}
-                >
-                  Log-out
+              <Link href="/dashboard">
+                <Button variant="ghost" className="text-purple-700 hover:text-purple-900 hover:bg-purple-200">
+                  Dashboard
                 </Button>
-                <Popover >
-                  <PopoverTrigger><UserIcon size={24} color="black" /></PopoverTrigger>
-                  <PopoverContent className="bg-amber-400 text-gray-800">
-                    welcome to secrecy {user.username || user.email} !
-                  </PopoverContent>
-                </Popover>
-              </div>
+              </Link>
+              <Button
+                variant="ghost"
+                className="text-purple-700 hover:text-purple-900 hover:bg-purple-200"
+                onClick={() => {
+                  async function signout() {
+                    await signOut({
+                      redirect: true,
+                      callbackUrl: "/sign-in",
+                    });
+                    toast("Signed out successfully");
+                    router.push('/sign-in')
+                  }
+                  signout()
+                }}
+              >
+                Sign out
+              </Button>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="ghost" size="sm" className="w-10 h-10 rounded-full bg-purple-200 hover:bg-purple-300">
+                    <UserIcon className="w-5 h-5 text-purple-600" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-64 p-4 bg-white border-purple-200">
+                  <div className="text-sm text-purple-600">
+                    Welcome to Secrecy, <span className="font-medium text-purple-900">{user.username || user.email}</span>!
+                  </div>
+                </PopoverContent>
+              </Popover>
             </>
           ) : (
-            <div className=" flex justify-between items-center gap-4">
+            <>
               <Link href="/sign-in">
-                <Button>Sign-in</Button>
+                <Button variant="ghost" className="text-purple-700 hover:text-purple-900 hover:bg-purple-200">
+                  Sign in
+                </Button>
               </Link>
               <Link href="/sign-up">
-                <Button>Sign-up</Button>
+                <Button className="bg-purple-900 hover:bg-purple-800 text-white">
+                  Sign up
+                </Button>
               </Link>
-            </div>
+            </>
           )}
         </div>
       </div>
-    </div>
+    </nav>
   );
 }
 
